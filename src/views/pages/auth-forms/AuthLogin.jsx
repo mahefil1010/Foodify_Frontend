@@ -22,13 +22,16 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useAuth } from '../../../contexts/AuthContext';
+import { login } from '../../../redux/actions/authActions';
+import { useDispatch } from 'react-redux';
 
 // ===============================|| JWT - LOGIN ||=============================== //
 
 export default function AuthLogin() {
   const theme = useTheme();
-    const { isAuthenticated ,setIsAuthenticated} = useAuth();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [checked, setChecked] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -62,9 +65,7 @@ export default function AuthLogin() {
       return { ...prev, [name]: error };
     });
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validateForm = () => {
     let errors = {};
     if (!formValues.email) {
       errors.email = 'Please enter your email';
@@ -76,26 +77,28 @@ export default function AuthLogin() {
     }
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
-      // Simulate login success
-      setIsAuthenticated(true);
-      navigate('/'); // Redirect to dashboard on successful login
-      // Redirect or perform further actions here
+      return true;
     }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+    var response = await dispatch(login(formValues));
+    setIsAuthenticated(true);
+    navigate('/'); // Redirect to dashboard on successful login
   };
 
   return (
     <form onSubmit={handleSubmit} noValidate>
       <FormControl fullWidth sx={{ ...theme.typography.customInput }} error={!!formErrors.email}>
         <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
-        <OutlinedInput
-          id="outlined-adornment-email-login"
-          type="email"
-          value={formValues.email}
-          name="email"
-          onChange={handleChange}
-        />
+        <OutlinedInput id="outlined-adornment-email-login" type="email" value={formValues.email} name="email" onChange={handleChange} />
         {formErrors.email && (
-          <Typography color="error" variant="caption">{formErrors.email}</Typography>
+          <Typography color="error" variant="caption">
+            {formErrors.email}
+          </Typography>
         )}
       </FormControl>
 
@@ -123,7 +126,9 @@ export default function AuthLogin() {
           label="Password"
         />
         {formErrors.password && (
-          <Typography color="error" variant="caption">{formErrors.password}</Typography>
+          <Typography color="error" variant="caption">
+            {formErrors.password}
+          </Typography>
         )}
       </FormControl>
 

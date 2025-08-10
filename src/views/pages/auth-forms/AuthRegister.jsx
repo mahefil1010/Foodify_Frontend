@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -22,12 +22,15 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useDispatch } from 'react-redux';
+import { register } from '../../../redux/actions/authActions';
 
 // ===========================|| JWT - REGISTER ||=========================== //
 
 export default function AuthRegister() {
   const theme = useTheme();
-
+const dispatch = useDispatch();
+const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [checked, setChecked] = useState(true);
   const [formValues, setFormValues] = useState({
@@ -35,6 +38,7 @@ export default function AuthRegister() {
     lastName: '',
     email: '',
     password: '',
+    role: 'user',
     confirmPassword: ''
   });
   const [formErrors, setFormErrors] = useState({
@@ -77,9 +81,8 @@ export default function AuthRegister() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let errors = {};
+
+  const validateForm = () => { let errors = {};
     if (!formValues.firstName) errors.firstName = 'Please enter your first name';
     if (!formValues.lastName) errors.lastName = 'Please enter your last name';
     if (!formValues.email) errors.email = 'Please enter your email';
@@ -89,7 +92,17 @@ export default function AuthRegister() {
     else if (formValues.password !== formValues.confirmPassword) errors.confirmPassword = 'Passwords do not match';
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
-      // Submit logic here
+      return true;
+    }
+  }
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+    const response= await dispatch(register(formValues));
+    if (response) {
+      navigate('/page/login'); // Redirect to dashboard on successful registration
     }
   };
 

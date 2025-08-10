@@ -1,5 +1,8 @@
+
 import { RouterProvider } from 'react-router-dom';
 import { AuthProvider } from 'contexts/AuthContext';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 // routing
 import router from 'routes';
@@ -13,14 +16,17 @@ import ThemeCustomization from 'themes';
 
 // ==============================|| APP ||============================== //
 
+
 export default function App() {
   return (
-    <AuthProvider>
-      <ThemeCustomization>
-        <NavigationScroll>
-          <RouterProvider router={router} />
-        </NavigationScroll>
-      </ThemeCustomization>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <ThemeCustomization>
+          <NavigationScroll>
+            <RouterProvider router={router} />
+          </NavigationScroll>
+        </ThemeCustomization>
+      </AuthProvider>
+    </Provider>
   );
 }
