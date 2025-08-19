@@ -58,7 +58,7 @@ export default function Login() {
                         Don&apos;t have an account?{' '}
                         <Typography
                           component={Link}
-                          to="/pages/register"
+                          to="/register"
                           color="primary"
                           sx={{ textDecoration: 'none', display: 'inline' }}
                         >

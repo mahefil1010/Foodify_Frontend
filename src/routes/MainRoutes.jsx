@@ -4,17 +4,9 @@ import { lazy } from 'react';
 
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-import { useAuth } from 'contexts/AuthContext';
-import { Navigate, useLocation } from 'react-router-dom';
 
-function ProtectedRoute({ children }) {
-  const { isAuthenticated } = useAuth();
-  const location = useLocation();
-  if (!isAuthenticated) {
-    return <Navigate to="/pages/login" state={{ from: location }} replace />;
-  }
-  return children;
-}
+import ProtectedRoute from './ProtectedRoute';
+import MenuIndex from '../component/lookups/menu/MenuIndex';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -65,7 +57,17 @@ const MainRoutes = {
     {
       path: '/sample-page',
       element: <SamplePage />
+    },
+    {
+      path: 'pages',
+      children: [
+        {
+          path: 'menu',
+          element: <ProtectedRoute><MenuIndex /></ProtectedRoute>
+        }
+      ]
     }
+    
   ]
 };
 

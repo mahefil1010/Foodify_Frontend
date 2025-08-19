@@ -54,7 +54,7 @@ export default function Register() {
                     <Grid container direction="column" sx={{ alignItems: 'center' }} size={12}>
                       <Typography variant="subtitle1" sx={{ textDecoration: 'none' }}>
                         Already have an account?{' '}
-                        <Typography component={Link} to="/pages/login" color="primary" sx={{ textDecoration: 'none', display: 'inline' }}>
+                        <Typography component={Link} to="/login" color="primary" sx={{ textDecoration: 'none', display: 'inline' }}>
                           Login
                         </Typography>
                         .

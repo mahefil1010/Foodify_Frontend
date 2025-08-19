@@ -8,7 +8,7 @@ const icons = {
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
-const pages = {
+const lookups = {
   id: 'pages',
   title: 'Pages',
   caption: 'Pages Caption',
@@ -16,23 +16,16 @@ const pages = {
   type: 'group',
   children: [
     {
-      id: 'authentication',
-      title: 'Authentication',
+      id: 'lookup',
+      title: 'Lookups',
       type: 'collapse',
       icon: icons.IconKey,
       children: [
         {
-          id: 'login',
-          title: 'login',
+          id: 'menu',
+          title: 'Menu',
           type: 'item',
-          url: '/pages/login',
-          target: true
-        },
-        {
-          id: 'register',
-          title: 'register',
-          type: 'item',
-          url: '/pages/register',
+          url: '/pages/menu',
           target: true
         }
       ]
@@ -40,4 +33,4 @@ const pages = {
   ]
 };
 
-export default pages;
+export default lookups;
